@@ -1,4 +1,7 @@
-## Laravel EnvTenant 2.2.*
+## Laravel EnvTenant 2.3.*
+Version 2.3.0 Changes:
+
+- Laravel 5.4 support.
 
 Version 2.2.9 Changes:
 
@@ -51,7 +54,7 @@ tenants are not found, which you can catch.
 Composer install:
 
 ```
-composer require thinksaydo/envtenant:2.2.*
+composer require alanshearer/envtenant:2.2.*
 ```
 
 Then run composer dump-autoload.
@@ -59,19 +62,19 @@ Then run composer dump-autoload.
 Tenants database table install:
 
 ```php 
-artisan migrate --path /vendor/thinksaydo/envtenant/migrations
+artisan migrate --path /vendor/alanshearer/envtenant/migrations
 ```
 
 Service provider install:
 
 ```php
-ThinkSayDo\EnvTenant\TenantServiceProvider::class,
+AlanShearer\EnvTenant\TenantServiceProvider::class,
 ```
 
 Tenant creation (just uses a standard Eloquent model):
 
 ```php
-$tenant = new \ThinkSayDo\EnvTenant\Tenant();
+$tenant = new \AlanShearer\EnvTenant\Tenant();
 $tenant->name = 'ACME Inc.';
 $tenant->email = 'person@acmeinc.com';
 $tenant->subdomain = 'acme';
@@ -106,10 +109,10 @@ The --tenant option works on all Artisan commands.
 
 ### Tenant
 
-The ```\ThinkSayDo\EnvTenant\Tenant``` class is a simple Eloquent model providing basic tenant settings.
+The ```\AlanShearer\EnvTenant\Tenant``` class is a simple Eloquent model providing basic tenant settings.
 
 ```php
-$tenant = new \ThinkSayDo\EnvTenant\Tenant();
+$tenant = new \AlanShearer\EnvTenant\Tenant();
 
 // The unique name field identifies the tenant profile
 $tenant->name = 'ACME Inc.';
@@ -137,7 +140,7 @@ $tenant->save();
 
 ### TenantResolver
 
-The ```\ThinkSayDo\EnvTenant\TenantResolver``` class is responsible for resolving and managing the active tenant
+The ```\AlanShearer\EnvTenant\TenantResolver``` class is responsible for resolving and managing the active tenant
 during Web and Artisan access. You can access the resolver class using ```app('tenant')```.
 
 ```php
@@ -201,22 +204,22 @@ Throughout the lifecycle events are fired allowing you to listen and customize b
 
 Tenant activated:
 ```php
-ThinkSayDo\EnvTenant\Events\TenantActivatedEvent
+AlanShearer\EnvTenant\Events\TenantActivatedEvent
 ```
 
 Tenant resolved:
 ```php
-ThinkSayDo\EnvTenant\Events\TenantResolvedEvent
+AlanShearer\EnvTenant\Events\TenantResolvedEvent
 ```
 
 Tenant not resolved:
 ```php
-ThinkSayDo\EnvTenant\Events\TenantNotResolvedEvent
+AlanShearer\EnvTenant\Events\TenantNotResolvedEvent
 ```
 
 Tenant not resolved via the Web, an exception is thrown:
 ```php
-ThinkSayDo\EnvTenant\Events\TenantNotResolvedException
+AlanShearer\EnvTenant\Events\TenantNotResolvedException
 ```
 
 

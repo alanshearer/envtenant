@@ -10,7 +10,7 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="ThinkSayDo EnvTenant Test Suite">
+        <testsuite name="AlanShearer EnvTenant Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
