@@ -1,0 +1,22 @@
+{
+    "name": "alanshearer/envtenant",
+    "description": "Laravel Multi-Tenant Aware Artisan.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "alanshearer",
+            "email": "enrico.bencivenga@hotmail.it"
+        }
+    ],
+    "require": {
+        "laravel/framework": "5.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alanshearer\\EnvTenant\\": "src"
+        }
+    }
+}
