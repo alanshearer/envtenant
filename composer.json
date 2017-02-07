@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Alanshearer\\EnvTenant\\": "src"
+            "AlanShearer\\EnvTenant\\": "src"
         }
     }
 }
