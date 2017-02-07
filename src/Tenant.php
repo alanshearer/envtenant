@@ -1,10 +1,10 @@
 <?php
-namespace ThinkSayDo\EnvTenant;
+namespace AlanShearer\EnvTenant;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use ThinkSayDo\EnvTenant\Contracts\TenantContract;
+use AlanShearer\EnvTenant\Contracts\TenantContract;
 
 class Tenant extends Model implements TenantContract
 {

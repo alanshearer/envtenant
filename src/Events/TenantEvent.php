@@ -1,8 +1,8 @@
 <?php
-namespace ThinkSayDo\EnvTenant\Events;
+namespace AlanShearer\EnvTenant\Events;
 
 use Illuminate\Queue\SerializesModels;
-use ThinkSayDo\EnvTenant\Tenant;
+use AlanShearer\EnvTenant\Tenant;
 
 class TenantEvent
 {

@@ -1,5 +1,5 @@
 <?php
-namespace ThinkSayDo\EnvTenant;
+namespace AlanShearer\EnvTenant;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,5 +1,5 @@
 <?php
-namespace ThinkSayDo\EnvTenant\Events;
+namespace AlanShearer\EnvTenant\Events;
 
 use Illuminate\Foundation\Application;
 

@@ -1,5 +1,5 @@
 <?php
-namespace ThinkSayDo\EnvTenant\Contracts;
+namespace AlanShearer\EnvTenant\Contracts;
 
 interface TenantContract
 {
