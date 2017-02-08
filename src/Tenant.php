@@ -1,16 +1,17 @@
 <?php
+
 namespace AlanShearer\EnvTenant;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use AlanShearer\EnvTenant\Contracts\TenantContract;
+use File;
 
-class Tenant extends Model implements TenantContract
-{
+class Tenant extends Model implements TenantContract {
+
     protected $table = 'tenants';
     protected $connection = 'envtenant';
-
     protected $fillable = [
         'name',
         'email',
@@ -19,7 +20,6 @@ class Tenant extends Model implements TenantContract
         'connection',
         'meta'
     ];
-
     protected $casts = [
         'name' => 'string',
         'email' => 'string',
@@ -29,75 +29,84 @@ class Tenant extends Model implements TenantContract
         'meta' => 'array'
     ];
 
-    public function __construct(array $attributes = [])
-    {
+    public function __construct(array $attributes = []) {
         $this->setConnection(config('database.default'));
 
         parent::__construct($attributes);
     }
 
-    public function getNameAttribute()
-    {
+    public function getNameAttribute() {
         return $this->attributes['name'];
     }
 
-    public function setNameAttribute($value)
-    {
+    public function setNameAttribute($value) {
         $this->attributes['name'] = trim($value);
     }
 
-    public function getEmailAttribute()
-    {
+    public function getEmailAttribute() {
         return $this->attributes['email'];
     }
 
-    public function setEmailAttribute($value)
-    {
+    public function setEmailAttribute($value) {
         $this->attributes['email'] = trim($value);
     }
 
-    public function getSubdomainAttribute()
-    {
+    public function getSubdomainAttribute() {
         return $this->attributes['subdomain'];
     }
 
-    public function setSubdomainAttribute($value)
-    {
+    public function setSubdomainAttribute($value) {
         $this->attributes['subdomain'] = mb_strtolower($this->_alphaOnly($value));
     }
 
-    public function getAliasDomainAttribute($value)
-    {
+    public function getAliasDomainAttribute($value) {
         return $this->attributes['alias_domain'];
     }
 
-    public function setAliasDomainAttribute($value)
-    {
+    public function setAliasDomainAttribute($value) {
         $this->attributes['alias_domain'] = mb_strtolower($this->_alphaOnly($value));
     }
 
-    public function getConnectionAttribute()
-    {
+    public function getConnectionAttribute() {
         return $this->attributes['connection'];
     }
 
-    public function setConnectionAttribute($value)
-    {
+    public function setConnectionAttribute($value) {
         $this->attributes['connection'] = strtolower(trim($value));
     }
 
-    public function getMetaAttribute()
-    {
+    public function getMetaAttribute() {
         return json_decode($this->attributes['meta'], true);
     }
 
-    public function setMetaAttribute($value)
-    {
+    public function setMetaAttribute($value) {
         $this->attributes['meta'] = json_encode($value);
     }
 
-    protected function _alphaOnly($value)
-    {
+    protected function _alphaOnly($value) {
         return preg_replace('/[^[:alnum:]\-\.]/u', '', $value);
     }
+
+    public function save(array $options = array(), bool $createEnvFile = false) {
+        $saved = parent::save($options);
+        if ($saved && $createEnvFile) {
+            $this->createEnvFile();
+        }
+    }
+
+    private function createEnvFile() {
+        $path = storage_path('/tenants/' . $this->subdomain . '/');
+        if (!file_exists($path)) {
+            File::makeDirectory($path);
+        }
+        $environmentPath = $path . '.env';
+        copy(base_path('.env'), $environmentPath);
+
+        if (file_exists($environmentPath)) {
+            file_put_contents($environmentPath, preg_replace(
+                '#(DB_DATABASE=.*)#', 'DB_DATABASE=' . $this->subdomain, file_get_contents($environmentPath)
+            ));
+        }
+    }
+
 }

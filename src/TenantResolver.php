@@ -192,16 +192,16 @@ class TenantResolver {
         /*
          *  IMPORTANT!!!
          *  Get and Set the enviroment variables
-         */    
+         */
         $envVariableArray = $this->getEnviromentVariableArray($path);
         config()->set($envVariableArray);
 
-        
+
         if ($hasConnection) {
             config()->set('tenant', $activeTenant->toArray());
             $this->app['db']->purge($this->defaultConnection);
         }
-        
+
         $this->app['db']->setDefaultConnection($connection);
     }
 
