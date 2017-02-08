@@ -154,31 +154,54 @@ class TenantResolver {
         return;
     }
 
+    private function getEnviromentVariableArray($path) {
+        $loader = new Dotenv\Loader($path);
+        $loader->load();
+        $connection = $loader->getEnvironmentVariable('DB_CONNECTION');
+        $host = $loader->getEnvironmentVariable('DB_HOST');
+        $port = $loader->getEnvironmentVariable('DB_PORT');
+        $database = $loader->getEnvironmentVariable('DB_DATABASE');
+        $username = $loader->getEnvironmentVariable('DB_USERNAME');
+        $password = $loader->getEnvironmentVariable('DB_PASSWORD');
+        return [
+            'database.default' => $connection,
+            'database.connections.' . $connection . '.host' => $host,
+            'database.connections.' . $connection . '.port' => $port,
+            'database.connections.' . $connection . '.database' => $database,
+            'database.connections.' . $connection . '.username' => $username,
+            'database.connections.' . $connection . '.password' => $password,
+            'database.connections.' . $connection . '.prefix' => '',
+        ];
+    }
+
     protected function setDefaultConnection($activeTenant) {
         $hasConnection = !empty($activeTenant->connection);
         $connection = $hasConnection ? $activeTenant->connection : $this->tenantConnection;
         $prefix = ($hasConnection && !empty($activeTenant->subdomain)) ? $activeTenant->subdomain . '_' : '';
         //$folder = $activeTenant->subdomain
         if (empty($activeTenant->subdomain)) {
-            $path = base_path();
+            $path = base_path('.env');
         } else {
-            $path = base_path('/storage/tenants/' . $activeTenant->subdomain . '/');
+            $path = base_path('/storage/tenants/' . $activeTenant->subdomain . '/.env');
         }
-        $dotenv = new Dotenv\Dotenv($path);
-        $dotenv->load();
 
         if ($hasConnection && empty($activeTenant->subdomain)) {
             $prefix = 'tenant' . $activeTenant->id . '_';
         }
 
-        config()->set('database.default', $connection);
-        config()->set('database.connections.' . $connection . '.prefix', '');
+        /*
+         *  IMPORTANT!!!
+         *  Get and Set the enviroment variables
+         */    
+        $envVariableArray = $this->getEnviromentVariableArray($path);
+        config()->set($envVariableArray);
 
+        
         if ($hasConnection) {
             config()->set('tenant', $activeTenant->toArray());
             $this->app['db']->purge($this->defaultConnection);
         }
-
+        
         $this->app['db']->setDefaultConnection($connection);
     }
 
