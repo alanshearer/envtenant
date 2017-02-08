@@ -87,20 +87,39 @@ class Tenant extends Model implements TenantContract {
         return preg_replace('/[^[:alnum:]\-\.]/u', '', $value);
     }
 
+    /*
+     * override Model::save method
+     */
+
     public function save(array $options = array(), bool $createEnvFile = false) {
         $saved = parent::save($options);
         if ($saved && $createEnvFile) {
-            $this->createEnvFile($this->subdomain);
-            $this->createDB($this->subdomain);
+            $this->createEnvFile();
+            $this->createDB();
         }
-    }
-    
-    private function createDB($dbname){
-        $this->getConnection()->statement('CREATE DATABASE ' . $dbname);
+        return $saved;
     }
 
-    private function createEnvFile($dbname) {
-        $path = storage_path('/tenants/' . $dbname . '/');
+    /*
+     * function createDB:
+     * create a database with name equals to subdomain property
+     */
+
+    public function createDB() {
+        return $this->getConnection()->statement('CREATE DATABASE ' . $this->subdomain);
+    }
+
+    /*
+     * function createEnvFile
+     * create a {subdomain}/.env file into the specified path, or eventually in /storage/tenants/
+     */
+
+    public function createEnvFile($path = "") {
+        if (empty($path)) {
+            $path = storage_path('/tenants/' . $this->subdomain . '/');
+        } else {
+            $path = $path . $this->subdomain . '/';
+        }
         if (!file_exists($path)) {
             File::makeDirectory($path);
         }
@@ -108,10 +127,9 @@ class Tenant extends Model implements TenantContract {
         copy(base_path('.env'), $environmentPath);
 
         if (file_exists($environmentPath)) {
-            file_put_contents($environmentPath, preg_replace(
-                '#(DB_DATABASE=.*)#', 'DB_DATABASE=' . $dbname, file_get_contents($environmentPath)
-            ));
+            file_put_contents($environmentPath, preg_replace('#(DB_DATABASE=.*)#', 'DB_DATABASE=' . $this->subdomain, file_get_contents($environmentPath)));
         }
+        return true;
     }
 
 }
