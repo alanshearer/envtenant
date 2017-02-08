@@ -90,12 +90,17 @@ class Tenant extends Model implements TenantContract {
     public function save(array $options = array(), bool $createEnvFile = false) {
         $saved = parent::save($options);
         if ($saved && $createEnvFile) {
-            $this->createEnvFile();
+            $this->createEnvFile($this->subdomain);
+            $this->createDB($this->subdomain);
         }
     }
+    
+    private function createDB($dbname){
+        $this->getConnection()->statement('CREATE DATABASE ' . $dbname);
+    }
 
-    private function createEnvFile() {
-        $path = storage_path('/tenants/' . $this->subdomain . '/');
+    private function createEnvFile($dbname) {
+        $path = storage_path('/tenants/' . $dbname . '/');
         if (!file_exists($path)) {
             File::makeDirectory($path);
         }
@@ -104,7 +109,7 @@ class Tenant extends Model implements TenantContract {
 
         if (file_exists($environmentPath)) {
             file_put_contents($environmentPath, preg_replace(
-                '#(DB_DATABASE=.*)#', 'DB_DATABASE=' . $this->subdomain, file_get_contents($environmentPath)
+                '#(DB_DATABASE=.*)#', 'DB_DATABASE=' . $dbname, file_get_contents($environmentPath)
             ));
         }
     }
