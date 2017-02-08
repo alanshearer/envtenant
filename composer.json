@@ -1,5 +1,6 @@
 {
     "name": "alanshearer/envtenant",
+    "version": "2.3.0",
     "description": "Laravel Multi-Tenant Aware Artisan.",
     "license": "MIT",
     "authors": [
@@ -19,5 +20,10 @@
         "psr-4": {
             "AlanShearer\\EnvTenant\\": "src"
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
