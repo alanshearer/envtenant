@@ -1,6 +1,5 @@
 {
     "name": "alanshearer/envtenant",
-    "version": "2.3.0",
     "description": "Laravel Multi-Tenant Aware Artisan.",
     "license": "MIT",
     "authors": [
@@ -10,8 +9,8 @@
         }
     ],
     "require": {
-        "laravel/framework": "5.*",
-        "vlucas/phpdotenv": "^2.*"
+        "laravel/framework": "^5.2",
+        "vlucas/phpdotenv": "^2.4"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"
