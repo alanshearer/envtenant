@@ -235,4 +235,5 @@ In your session config file, change the domain value to be something like this:
 'domain' => ( ! empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : null,
 ```
 
+
 ### Enjoy! Report issues or ideas.
