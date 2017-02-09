@@ -91,7 +91,7 @@ class Tenant extends Model implements TenantContract {
      * override Model::save method
      */
 
-    public function save(array $options = array(), bool $createEnvFile = false) {
+    public function save(array $options = array(), $createEnvFile = true) {
         $saved = parent::save($options);
         if ($saved && $createEnvFile) {
             $this->createEnvFile();
@@ -114,7 +114,7 @@ class Tenant extends Model implements TenantContract {
      * create a {subdomain}/.env file into the specified path, or eventually in /storage/tenants/
      */
 
-    public function createEnvFile($path = "") {
+    public function createEnvFile($path = '') {
         if (empty($path)) {
             $path = storage_path('/tenants/' . $this->subdomain . '/');
         } else {
