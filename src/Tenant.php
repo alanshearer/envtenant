@@ -121,7 +121,7 @@ class Tenant extends Model implements TenantContract {
             $path = $path . $this->subdomain . '/';
         }
         if (!file_exists($path)) {
-            File::makeDirectory($path);
+            mkdir($path, 0777, true);
         }
         $environmentPath = $path . '.env';
         copy(base_path('.env'), $environmentPath);
